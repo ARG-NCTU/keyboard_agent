@@ -11,10 +11,8 @@ env = gym.make('LunarLander-v2', gravity= -5.0, turbulence_power = 1, render_mod
 env.reset()
 env.render()
 def callback(obs_t, obs_tp1, action, rew, terminated, truncated, info):
-    if terminated and rew==100:
-        print("\x1b[6;30;42mSuccess!!\x1b[0m")
-    elif terminated: 
-        print("Crashed!!")   
+    if terminated :
+    	print("\x1b[6;30;42mSuccess!!\x1b[0m") if rew==100 else print("Crashed!!")   
     return [rew]
 plotter = PlayPlot(callback, 150, ["reward"])
 play(env,callback = plotter.callback
