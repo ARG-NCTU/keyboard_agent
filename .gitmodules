@@ -1,0 +1,3 @@
+[submodule "pypkg/gym"]
+	path = pypkg/gym
+	url = git@github.com:uwe77/gym.git
