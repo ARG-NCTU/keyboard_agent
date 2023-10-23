@@ -60,10 +60,10 @@ docker run \
     -v "/etc/localtime:/etc/localtime:ro" \
     -v "/dev:/dev" \
     -v "/var/run/docker.sock:/var/run/docker.sock" \
-    -v "/home/$USER/keyboard_agent:/home/arg/keyboard_agent" \
-    -w "/home/arg/keyboard_agent" \
+    -v "/home/$USER/lunarlander_keyboard_agent:/home/arg/lunarlander_keyboard_agent" \
+    -w "/home/arg/lunarlander_keyboard_agent" \
     --user root \
-    --name keyboard_agent \
+    --name lunarlander_keyboard_agent \
     --network host \
     --privileged \
     --security-opt seccomp=unconfined \
