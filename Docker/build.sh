@@ -1,2 +1,2 @@
 #!/bin/sh
-docker build --rm -t argnctu/keyboard_agent:latest .
+docker build --rm -t argnctu/oop .
