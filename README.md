@@ -43,3 +43,12 @@ success or crashed
 <p align="center">
 <img src="img/terminal.gif" width="500px"><br>
 </p>
+
+## UAV_Lander
+If you want to run uav-lander, execute the following command after entering docker. \
+There's a 'pip3 install -e uav_gym' command inside the 'install_custom_gym.sh' script. It'll register our custom gymnasium named "uav_gym."
+```
+source install_custom_gym.sh
+cd scripts/
+python3 uav_lander.py
+```
