@@ -5,10 +5,10 @@ This repo can use keyboard to control the agent in training environments.
 Please pull the docker image 
 
 ```
-docker pull argnctu/keyboard_agent:latest
+docker pull argnctu/oop
 ```
 
-for terminal 1
+For the first terminal,
 ```
 source docker_run.sh
 ```
@@ -17,10 +17,12 @@ other terminals
 source docker_join.sh
 ```
 
-to run the keyboard agent, please run 
+To run the keyboard agent, please run 
 ```
-python3 key_press.py
+source install_custom_gym.sh
+python3 scripts/key_press.py
 ```
+
 ### To control the agent
 **W** : fire the main engine  
 **A** : fire right orientation engine  
