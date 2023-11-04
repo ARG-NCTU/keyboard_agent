@@ -46,16 +46,16 @@ class UavLander(LunarLander):
 #=========================================terrain==============================================
         W = VIEWPORT_W / SCALE
         H = VIEWPORT_H / SCALE
-        CHUNKS = 18 # originally 11
+        CHUNKS = 30 # originally 11
+        width_para = 6
+
         height = self.np_random.uniform(0, H / 2, size=(CHUNKS + 1,)) # ground height, random points(CHUNKS + 1), 
                                                                       # from 0 to H / 2
         chunk_x = [W / (CHUNKS - 1) * i for i in range(CHUNKS)] # ground got CHUNKS point distributed evenly
 
         # helipad is not in the middle of the ground, it is in the middle of the screen
-        self.helipad_x1 = chunk_x[CHUNKS // 2 - 1]
-        self.helipad_x2 = chunk_x[CHUNKS // 2 + 1]
+        
 
-        my_cuntom_helipad_hight = 3
         # self.helipad_y = H / 4 # originally H / 4
         # height[CHUNKS // 2 - 2] = self.helipad_y
         # height[CHUNKS // 2 - 1] = self.helipad_y
@@ -67,10 +67,16 @@ class UavLander(LunarLander):
             for i in range(CHUNKS)
         ]
         height[CHUNKS // 2 + 0] = self.np_random.uniform(0, H *3 / 5, size = 1)[0]
-        self.helipad_y = height[CHUNKS // 2 + 0] + my_cuntom_helipad_hight
-        smooth_y[CHUNKS // 2 - 1] = self.helipad_y
+        self.helipad_y = height[CHUNKS // 2 + 0]
+
+        width_node = (CHUNKS // width_para - 1) // 2
+        self.helipad_x1 = chunk_x[CHUNKS // 2 - width_node]
+        self.helipad_x2 = chunk_x[CHUNKS // 2 + width_node]
+
         smooth_y[CHUNKS // 2 + 0] = self.helipad_y
-        smooth_y[CHUNKS // 2 + 1] = self.helipad_y
+        for i in range(width_node):
+            smooth_y[CHUNKS // 2 - (i+1)] = self.helipad_y
+            smooth_y[CHUNKS // 2 + (i+1)] = self.helipad_y
 
         self.moon = self.world.CreateStaticBody(
             shapes=edgeShape(vertices=[(0, 0), (W, 0)])
@@ -152,4 +158,3 @@ class UavLander(LunarLander):
         if self.render_mode == "human":
             self.render()
         return self.step(np.array([0, 0]) if self.continuous else 0)[0], {}
-
