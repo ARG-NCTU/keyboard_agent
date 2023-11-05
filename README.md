@@ -17,10 +17,15 @@ other terminals
 source docker_join.sh
 ```
 
-To run the keyboard agent, please run 
+To run the keyboard agent with customized gym env, please run 
 ```
 source install_custom_gym.sh
-python3 scripts/uav_lander.py
+python3 scripts/uav_lander_high_target.py
+```
+
+To run standard lunarlander
+```
+python3 scripts/lunar_lander_main.py
 ```
 
 ### To control the agent
