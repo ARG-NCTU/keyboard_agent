@@ -1,9 +1,11 @@
-import gym
-from gym.utils.play import play, display_arr, PlayPlot
-import sys, gym, time
-import pygame
+import sys, time
 import os
+
+import pygame
+import gymnasium as gym
+from gymnasium.utils.play import play, display_arr, PlayPlot
 import numpy as np
+
 import warnings
 warnings.filterwarnings("ignore")
 
