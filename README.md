@@ -59,3 +59,8 @@ source install_custom_gym.sh
 cd scripts/
 python3 uav_lander.py
 ```
+you can see two windows pop up :
+### lunar lander game 
+<p align="center">
+<img src="img/uav_lander.gif"/>
+</p>
