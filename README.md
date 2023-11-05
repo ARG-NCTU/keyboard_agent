@@ -60,7 +60,19 @@ cd scripts/
 python3 uav_lander.py
 ```
 you can see two windows pop up :
-### lunar lander game 
+### uav lander game 
 <p align="center">
-<img src="img/uav_lander.gif"/>
+<img src="img/uav_lander.gif" width="500px"><br>
+</p>
+
+### plot of agent's reward  
+<p align="center">
+<img src="img/uav_reward_cut.gif" width="500px" ><br>
+</p>
+
+also, you can see the result of your uav lander in terminal :  
+success or crashed
+
+<p align="center">
+<img src="img/uav_lander_terminal.gif" width="500px"><br>
 </p>
