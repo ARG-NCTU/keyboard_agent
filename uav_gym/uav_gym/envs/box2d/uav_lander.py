@@ -30,6 +30,30 @@ except ImportError as e:
     ) from e
 
 class UavLander(LunarLander):
+    # TODO: Please add docstrings for this class
+    """
+    Description:
+        The agent (a moon-lander) is started at a random position above the moon's surface.
+        The agent is given a reward of 100 points if it lands safely on the moon's surface.
+        The agent is given a reward of -100 points if it crashes on the moon's surface.
+
+    Atributes:
+        world: Box2D.b2World
+        lander: Box2D.b2Body
+        lags: Box2D.b2Body
+
+    Methods:
+        step
+        reset
+        render
+        close
+
+    Usage:
+    >>> env = UavLander()
+    >>> env.reset()
+    >>> env.render()
+    Expected output
+    """
     def reset(
         self,
         *,
@@ -43,6 +67,7 @@ class UavLander(LunarLander):
         self.game_over = False
         self.prev_shaping = None
 
+# TODO: please make this a class method
 #=========================================terrain==============================================
         W = VIEWPORT_W / SCALE
         H = VIEWPORT_H / SCALE
