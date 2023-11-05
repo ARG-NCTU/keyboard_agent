@@ -1,15 +1,18 @@
-from gymnasium.utils.play import play, display_arr, PlayPlot
-import sys, time
-# import uav_gym
-import gymnasium as gym
-import pygame
+import sys
+import time
 import os
 import numpy as np
+
+import pygame
+import gymnasium as gym
+from gymnasium.utils.play import play, display_arr, PlayPlot
+# import uav_gym
 import warnings
+warnings.filterwarnings("ignore")
+
 import add_path
 
-warnings.filterwarnings("ignore")
-env = gym.make('uav_gym:UavLander-v0', gravity= -5.0, turbulence_power = 1, render_mode="rgb_array")
+env = gym.make('uav_gym:UavLander-v0', gravity=-5.0, turbulence_power=1, render_mode="rgb_array")
 env.reset()
 env.render()
 def callback(obs_t, obs_tp1, action, rew, terminated, truncated, info):
