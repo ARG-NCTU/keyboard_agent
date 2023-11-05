@@ -20,7 +20,7 @@ source docker_join.sh
 To run the keyboard agent, please run 
 ```
 source install_custom_gym.sh
-python3 scripts/key_press.py
+python3 scripts/uav_lander.py
 ```
 
 ### To control the agent
