@@ -29,6 +29,9 @@ except ImportError as e:
         "Box2D is not installed, run `pip install gymnasium[box2d]`"
     ) from e
 
+UAV_BOT_LENGTH = 36
+UAV_HIGHT = 8
+
 class UavLander(LunarLander):
     # TODO: Please add docstrings for this class
     """
@@ -55,15 +58,25 @@ class UavLander(LunarLander):
     Expected output
     """
     def _gen_uav_terrain(self, terrain_node:int = 30, flat_platform:bool = True)->None:
+        """
+        The _gen_uav_terrain for
+        1. generate the terrain
+
+        Args:
+            terrain_node: int, default 30
+                the number of terrain node
+            flat_platform: bool, default True
+                generate the flat platform
+                or generate the non-flat platform
+
+        """
         W = VIEWPORT_W / SCALE
         H = VIEWPORT_H / SCALE
         CHUNKS = terrain_node # originally 1_gen_uav_lander1
         width_para = 6
-
         height = self.np_random.uniform(0, H / 2, size=(CHUNKS + 1,)) # ground height, random points(CHUNKS + 1), 
                                                                       # from 0 to H / 2
         chunk_x = [W / (CHUNKS - 1) * i for i in range(CHUNKS)] # ground got CHUNKS point distributed evenly
-
         # helipad is not in the middle of the ground, it is in the middle of the screen
         smooth_y = [
             0.33 * (height[i - 1] + height[i + 0] + height[i + 1])
@@ -74,18 +87,14 @@ class UavLander(LunarLander):
         width_node = (CHUNKS // width_para - 1) // 2
         self.helipad_x1 = chunk_x[CHUNKS // 2 - width_node] #flag 1
         self.helipad_x2 = chunk_x[CHUNKS // 2 + width_node] #flag 2
-
         smooth_y[CHUNKS // 2 + 0] = self.helipad_y
-
         angle = 0
         if not flat_platform:
-            angle = self.np_random.uniform(-math.pi / 6, math.pi / 6, size = 1)[0]
-
+            angle = self.np_random.uniform(-math.pi / 10, math.pi / 10, size = 1)[0]
         diff_high = math.tan(angle) * W / (CHUNKS - 1)
         for i in range(width_node):
             smooth_y[CHUNKS // 2 - (i+1)] = self.helipad_y - diff_high * (i+1)
             smooth_y[CHUNKS // 2 + (i+1)] = self.helipad_y + diff_high * (i+1)
-
         self.moon = self.world.CreateStaticBody(
             shapes=edgeShape(vertices=[(0, 0), (W, 0)])
         )
@@ -95,12 +104,26 @@ class UavLander(LunarLander):
             p2 = (chunk_x[i + 1], smooth_y[i + 1])
             self.moon.CreateEdgeFixture(vertices=[p1, p2], density=0, friction=0.1)
             self.sky_polys.append([p1, p2, (p2[0], H), (p1[0], H)])
-
         self.moon.color1 = (0.0, 0.0, 0.0)
         self.moon.color2 = (0.0, 0.0, 0.0)
 
-    def _gen_uav_lander(self)->None:
+    def _gen_uav_lander(self, uav_model:bool = True)->None:
+        """
+        The _gen_uav_lander for
+        1. generate the uav lander
+
+        Args:
+            uav_model: bool, default True
+                generate the uav lander
+                or generate the lunar lander
+            
+        """
         initial_y = VIEWPORT_H / SCALE
+        if uav_model:
+            length = UAV_BOT_LENGTH/2
+            LANDER_POLY = [(-length-2, +8), (-length-4, +3), (-length, -5), (+length, -5), (+length+4, +3), (+length+2, +8)] # original [(-14, +17), (-17, 0), (-17, -10), (+17, -10), (+17, 0), (+14, +17)] 
+            LEG_AWAY = 10 # origin 20
+            LEG_H = 14 # origin 8
         self.lander: Box2D.b2Body = self.world.CreateDynamicBody(
             position=(VIEWPORT_W / SCALE / 2, initial_y),
             angle=0.0,
@@ -124,7 +147,6 @@ class UavLander(LunarLander):
             ),
             True,
         )
-
         self.legs = []
         for i in [-1, +1]:
             leg = self.world.CreateDynamicBody(
@@ -168,6 +190,16 @@ class UavLander(LunarLander):
         seed: Optional[int] = None,
         options: Optional[dict] = None,
     ):
+        """
+        The reset for
+        1. generate the terrain
+        2. generate the uav lander
+
+        Args:
+
+        Returns:
+            
+        """
         super().reset(seed=seed)
         self._destroy()
         self.world.contactListener_keepref = ContactDetector(self)
@@ -176,7 +208,7 @@ class UavLander(LunarLander):
         self.prev_shaping = None
 
         self._gen_uav_terrain(terrain_node=90, flat_platform=False)
-        self._gen_uav_lander()
+        self._gen_uav_lander(uav_model=True)
 
         self.drawlist = [self.lander] + self.legs # list of Box2D.b2Body
 
@@ -185,7 +217,8 @@ class UavLander(LunarLander):
         return self.step(np.array([0, 0]) if self.continuous else 0)[0], {}
     
 
-    #=======================================gen=engine====================================
+    # #=======================================gen=engine====================================
+
     # def step(self, action):
     #     assert self.lander is not None
 
@@ -247,6 +280,7 @@ class UavLander(LunarLander):
     #         ox = tip[0] * (4 / SCALE + 2 * dispersion[0]) + side[0] * dispersion[1]
     #         oy = -tip[1] * (4 / SCALE + 2 * dispersion[0]) - side[1] * dispersion[1]
     #         impulse_pos = (self.lander.position[0] + ox, self.lander.position[1] + oy)
+
     #         p = self._create_particle(
     #             3.5,  # 3.5 is here to make particle speed adequate
     #             impulse_pos[0],
@@ -264,7 +298,11 @@ class UavLander(LunarLander):
     #             True,
     #         )
 
+    #     uav_model = True
     #     s_power = 0.0
+    #     if uav_model:
+    #         SIDE_ENGINE_POWER = MAIN_ENGINE_POWER / 10
+
     #     if (self.continuous and np.abs(action[1]) > 0.5) or (
     #         not self.continuous and action in [1, 3]
     #     ):
@@ -274,16 +312,26 @@ class UavLander(LunarLander):
     #             s_power = np.clip(np.abs(action[1]), 0.5, 1.0)
     #             assert s_power >= 0.5 and s_power <= 1.0
     #         else:
-    #             direction = action - 2
+    #             if uav_model:
+    #                 direction = -(action - 2)
+    #             else:
+    #                 direction = action - 2
     #             s_power = 1.0
-    #         ox = tip[0] * dispersion[0] + side[0] * (
+    #         # ox = tip[0] * dispersion[0] + side[0] * (
+    #         #     3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
+    #         # )
+    #         # oy = -tip[1] * dispersion[0] - side[1] * (
+    #         #     3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
+    #         # )
+    #         ox = tip[0] * (4 / SCALE + 2 * dispersion[0]) + side[0] * (
     #             3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
     #         )
-    #         oy = -tip[1] * dispersion[0] - side[1] * (
+    #         oy = -tip[1] * (4 / SCALE + 2 * dispersion[0]) - side[1] * (
     #             3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
     #         )
+            
     #         impulse_pos = (
-    #             self.lander.position[0] + ox - tip[0] * 17 / SCALE,
+    #             self.lander.position[0] + ox - tip[0] * UAV_BOT_LENGTH/2 / SCALE,
     #             self.lander.position[1] + oy + tip[1] * SIDE_ENGINE_HEIGHT / SCALE,
     #         )
     #         p = self._create_particle(0.7, impulse_pos[0], impulse_pos[1], s_power)

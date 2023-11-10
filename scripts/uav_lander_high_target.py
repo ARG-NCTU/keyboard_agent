@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 
 import add_path
 
-env = gym.make('uav_gym:UavLander-v0', gravity=-5.0, turbulence_power=1, render_mode="rgb_array")
+env = gym.make('uav_gym:UavLander-v0', continuous = False, gravity=-5.0, turbulence_power=1, render_mode="rgb_array")
 env.reset()
 env.render()
 def callback(obs_t, obs_tp1, action, rew, terminated, truncated, info):
