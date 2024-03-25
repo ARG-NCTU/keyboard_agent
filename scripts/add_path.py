@@ -3,5 +3,5 @@ import sys
 
 sys.path.append(
     os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "../uav_gym")
+        os.path.dirname(os.path.abspath(__file__)), "../lunarlander_keyboard_agent")
         )

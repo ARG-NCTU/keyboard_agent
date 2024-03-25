@@ -32,7 +32,7 @@ except ImportError as e:
 UAV_BOT_LENGTH = 36
 UAV_HIGHT = 8
 
-class UavLander(LunarLander):
+class UavLander_v1(LunarLander):
     # TODO: Please add docstrings for this class
     """
     Description:
