@@ -1,3 +1,3 @@
 #! usr/bin/bash
 
-pip3 install -e uav_gym
+pip3 install -e custom_gymnasium
