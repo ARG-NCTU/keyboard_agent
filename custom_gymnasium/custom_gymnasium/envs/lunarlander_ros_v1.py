@@ -32,6 +32,8 @@ import math
 from std_msgs.msg import Float32MultiArray, Int32
 from geometry_msgs.msg import Polygon, Point32
 
+
+# LANDER_POLY = [(-14, +37), (-17, 0), (-17, -10), (+17, -10), (+17, 0), (+14, +37)]
 class LunarLander_ROS_v1(LunarLander):
     
     def __init__(self,
@@ -207,8 +209,8 @@ class LunarLander_ROS_v1(LunarLander):
             x_rotated = x * math.cos(angle) - y * math.sin(angle)
             y_rotated = x * math.sin(angle) + y * math.cos(angle)
             # Translate the point by the position of the body
-            x_translated = x_rotated + position.x
-            y_translated = y_rotated + position.y
+            x_translated = x_rotated + position.x*SCALE
+            y_translated = y_rotated + position.y*SCALE
             return x_translated, y_translated
         """
         The step for
@@ -236,7 +238,6 @@ class LunarLander_ROS_v1(LunarLander):
         lunarlander_msg=Polygon()
         for x,y in lander_vertices:
             lunarlander_msg.points.append(Point32(x=x, y=y))
-        # lunarlander_msg=Polygon(points=[Point32(x=lander_vertices[0][0], y=lander_vertices[0][1]), Point32(x=lander_vertices[1][0], y=lander_vertices[1][1]), Point32(x=lander_vertices[2][0], y=lander_vertices[2][1])])
         self._publish_msgs(thruster_msg=Int32(data=action), terrain_msg=terrain_msg, lunarlander_msg=lunarlander_msg)
         return statet, reward, terminated, truncated, info
 
