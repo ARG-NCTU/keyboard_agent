@@ -10,17 +10,14 @@ docker pull argnctu/oop
 
 For the first terminal,
 ```
-source docker_run.sh
-```
-other terminals
-```
-source docker_join.sh
+source Docker/oop/docker_run.sh
 ```
 
 To run the keyboard agent with customized gym env, please run 
 ```
 source install_custom_gym.sh
-python3 scripts/uav_lander_high_target.py
+cd scripts
+python3 uav_lander_high_target.py
 ```
 
 To run standard lunarlander
